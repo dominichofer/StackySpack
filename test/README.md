@@ -1,8 +1,14 @@
+The tests are segmented according to the following idea: There's code in spack, there's code in this repo, and there's code in the packages.
+Neither testing spack, nor testing the packages, is the responsibility of this repo.
+Testing this repo and the integration with spack and the packages is this repo's responsibility.
+
 # Unit tests
-Designed to run without a spack instance. They do not test spack. They do not test packages. They only test package descriptions or other stand-alone components.
+They test this repo.
+They run without a spack instance. They do not test spack, nor packages.
 
 # Integration tests
-Designed to test if spack-c2sm integrates with spack. They do not test packages.
+They test the integration of this repo with spack.
+They do not test packages. They test package descriptions.
 
 # System tests
-Designed to test the collaboration of spack-c2sm, spack and the packages.
+They test the collaboration of this repo, spack, and the packages.

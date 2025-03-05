@@ -1,32 +1,14 @@
 import pytest
-import os
-from .spack_commands import spack_info, spack_spec
-
-packages_dir = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "..", "repo", "packages"
-)
-
-all_packages = [
-    name
-    for name in os.listdir(packages_dir)
-    if os.path.isdir(os.path.join(packages_dir, name))
-]
+from .spack_commands import ALL_PACKAGES, spack_info, spack_spec
 
 
-@pytest.mark.parametrize('package', all_packages)
+@pytest.mark.parametrize("package", ALL_PACKAGES)
 def test_info(package: str):
-    "Tests that the command 'spack info <package>' works for all packages."
+    "Tests that the command 'spack info <package>' works."
     spack_info(package)
 
 
-@pytest.mark.parametrize('package', all_packages)
+@pytest.mark.parametrize("package", ALL_PACKAGES)
 def test_spec(package: str):
-    "Tests that the command 'spack spec <package>' works for all packages."
-    spack_info(package)
-
-def test_spec_gridtools():
-    spack_spec("gridtools ~cuda")
-    spack_spec("gridtools +cuda")
-
-def test_spec_int2lm():
-    spack_spec("int2lm +parallel")
+    "Tests that the command 'spack spec <package>' works."
+    spack_spec(package)

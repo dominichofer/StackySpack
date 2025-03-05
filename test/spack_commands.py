@@ -3,7 +3,12 @@ import subprocess
 import time
 from pathlib import Path
 
-repo_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+REPO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+PACKAGES_DIR = os.path.join(REPO_DIR, "repo", "packages")
+ALL_PACKAGES = [
+    name for name in os.listdir(PACKAGES_DIR)
+    if os.path.isdir(os.path.join(PACKAGES_DIR, name))
+]
 
 
 def time_format(seconds) -> str:
@@ -22,7 +27,7 @@ def time_format(seconds) -> str:
     return " ".join(parts)
 
 
-def log_file(command: str) -> str:
+def log_file(command: str) -> Path:
     # Filter out flags
     # and join by underscore, because spaces cause problems in bash.
     command = "_".join([x for x in command.split() if not x.startswith("-")])
@@ -30,54 +35,53 @@ def log_file(command: str) -> str:
     # Remove % because they cause problems in web browsers
     command = command.replace("%", "")
 
-    return Path(repo_dir) / "log" / (command + ".log")
+    return Path(REPO_DIR) / "log" / (command + ".log")
 
 
-def run_with_spack(command: str, log: str) -> None:
+def run_with_spack(command: str, log: Path) -> None:
+    log.parent.mkdir(exist_ok=True, parents=True)
     with log.open("a") as f:
-        f.write(command)
-        f.write("\n\n")
+        f.write(f"{command}\n\n")
+
+    sysconf = os.environ.get("SPACK_SYSTEM_CONFIG_PATH", "")
 
     start = time.time()
-    sysconf = os.environ["SPACK_SYSTEM_CONFIG_PATH"]
+    # Stream directly to avoid buffering.
+    # 'env -i' clears the environment.
+    # 'bash -l' makes it a login shell.
+    # 'bash -c' reads commands from string.
+    # '2>&1' redirects stderr to stdout.
     ret = subprocess.run(
-        f". {repo_dir}/setup-env.sh {sysconf}; {command} >> {log} 2>&1",
+        f'env -i bash -l -c "(. {REPO_DIR}/setup-env.sh {sysconf}; {command}) >> {log} 2>&1"',
         check=False,
         shell=True,
     )
     end = time.time()
 
     # Log time and success
+    duration = time_format(end - start)
+    success = "OK" if ret.returncode == 0 else "FAILED"
     with log.open("a") as f:
-        f.write("\n\n")
-        f.write(time_format(end - start))
-        f.write("\n")
-        f.write("OK" if ret.returncode == 0 else "FAILED")
-        f.write("\n")
+        f.write(f"\n\n{duration}\n{success}\n")
 
     ret.check_returncode()
 
 
 def spack_info(spec: str):
     log = log_file(f"info {spec}")
-    log.parent.mkdir(exist_ok=True, parents=True)
-
     run_with_spack(f"spack info {spec}", log)
 
 
 def spack_spec(spec: str):
     log = log_file(f"spec {spec}")
-    log.parent.mkdir(exist_ok=True, parents=True)
-
     run_with_spack(f"spack spec {spec}", log)
 
 
 def spack_install(spec: str, test_root: bool = True):
     log = log_file(f"install {spec}")
-    log.parent.mkdir(exist_ok=True, parents=True)
 
     # A spec at the top of a log helps debugging.
     run_with_spack(f"spack spec {spec}", log)
 
     test_arg = "--test=root" if test_root else ""
-    run_with_spack(f"spack install --no-checksum --verbose {test_arg} {spec}")
+    run_with_spack(f"spack install --verbose {test_arg} {spec}", log)
