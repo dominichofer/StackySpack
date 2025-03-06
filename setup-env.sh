@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 parent_dir=$( cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%x}}")" ; pwd -P )
 
