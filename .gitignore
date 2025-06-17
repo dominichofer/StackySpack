@@ -1,3 +1,8 @@
+spack-build_stage/
+spack-test_stage/
+spack-misc_cache/
+user-cache/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
