@@ -15,7 +15,7 @@ or none
 ```bash
 . StackySpack/setup-env.sh
 ```
-and enjoy spack on a software stack.
+and enjoy [spack](https://spack.io/) on a software stack.
 
 ## Content
 - `repo/`: Repository of package descriptions. Parallel to https://github.com/spack/spack/tree/v0.23.1/var/spack/repos/builtin
