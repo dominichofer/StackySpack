@@ -1,5 +1,7 @@
-#!/bin/bash
-
+if [ ! "${BASH_SOURCE-}" ]; then
+    echo "Sorry, this only works in bash" >&2
+    return 1
+fi
 parent_dir=$( cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%x}}")" ; pwd -P )
 
 # Override local configuration
