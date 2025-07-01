@@ -24,5 +24,8 @@ and enjoy [spack](https://spack.io/) on a software stack.
 - `user-config/`: Configurations to make spack emit files only into this repo's directory, so it doesn't spill files. (Configured as "user" scope, as described in https://spack-tutorial.readthedocs.io/en/latest/tutorial_configuration.html#configuration-scopes)
 - `setup-env.sh`: Main entry point. Sourcable script.
 
+## Usage
+To extend spack with a custom package descriptions, or extend an existing package, create `repo/packages/my_package/package.py` and follow https://spack-tutorial.readthedocs.io/en/latest/tutorial_packaging.html .
+
 ## Tesing + CI
 Packages in `repo/packages` are automatically detected and tested with the framework in `test/`, which is triggered by `.github/workflows/spack_ci.yml`.
