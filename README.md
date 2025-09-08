@@ -5,7 +5,7 @@ Clone this repo
 git clone -c feature.manyFiles=true --recurse-submodules --shallow-submodules https://github.com/dominichofer/StackySpack.git
 ```
 
-Source it with an upstream
+Source it with an upstream (here are 3 examples)
 ```bash
 . StackySpack/setup-env.sh /cluster/software/stacks/2025-06
 . StackySpack/setup-env.sh /mch-environment/v86
