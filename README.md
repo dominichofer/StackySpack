@@ -1,4 +1,5 @@
 # Stacky Spack
+This version of Stacky Spack uses [Spack v1.0.2](https://github.com/spack/spack/releases/tag/v1.0.2) and is therefore compatible with it. Compatibility across versions is not given.
 
 Clone this repo
 ```bash
@@ -7,7 +8,7 @@ git clone -c feature.manyFiles=true --recurse-submodules --shallow-submodules ht
 
 Source it with an upstream (here are 3 examples)
 ```bash
-. StackySpack/setup-env.sh /cluster/software/stacks/2025-06
+. StackySpack/setup-env.sh /cluster/software/stacks/2051-10
 . StackySpack/setup-env.sh /mch-environment/v86
 . StackySpack/setup-env.sh $USER_ENV_ROOT
 ```
